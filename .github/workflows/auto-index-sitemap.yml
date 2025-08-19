@@ -3,7 +3,7 @@ name: Auto-index y sitemap
 on:
   push:
     paths:
-      - 'posts/**/*.md'
+      - 'posts/*.md'
 
 jobs:
   build:
