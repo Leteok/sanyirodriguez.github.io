@@ -1,6 +1,7 @@
 name: Auto-index y sitemap
 
 on:
+  workflow_dispatch:
   push:
     paths:
       - 'posts/*.md'
