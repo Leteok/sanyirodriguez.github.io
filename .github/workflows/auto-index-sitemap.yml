@@ -1,0 +1,36 @@
+name: Auto-index y sitemap
+
+on:
+  push:
+    paths:
+      - 'posts/**/*.md'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Generar README.md y sitemap.xml
+        run: |
+          echo "# Índice de posts" > README.md
+          for f in posts/*.md; do
+            title=$(head -n1 "$f" | sed 's/^# //')
+            slug=$(basename "$f" .md)
+            echo "- [${title}](${slug})" >> README.md
+          done
+
+          echo '<?xml version="1.0" encoding="UTF-8"?>' > sitemap.xml
+          echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' >> sitemap.xml
+          for f in posts/*.md; do
+            slug=$(basename "$f" .md)
+            echo "  <url><loc>https://sanyirodriguez.github.io/${slug}</loc></url>" >> sitemap.xml
+          done
+          echo '</urlset>' >> sitemap.xml
+
+      - name: Commit y push
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Actualiza índice y sitemap"
+          author_name: "github-actions"
+          author_email: "actions@github.com"
