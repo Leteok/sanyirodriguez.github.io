@@ -1,1 +1,1 @@
-
+Activación manual desde móvil.
